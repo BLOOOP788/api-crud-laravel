@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Category;
-
+use App\Http\Requests\SaveCategoryRequest;
+use App\Http\Requests\UpdateCategoryRequest;
 class CategoryController extends Controller
 {
     /**
@@ -23,9 +24,17 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(SaveCategoryRequest $request)
     {
-        //
+        $category=new Category();
+        $category->title=$request->title;
+        $category->description=$request->description;
+        $category->save();
+
+        return response()->json([
+            'res'=>true,
+            'msg'=>'Category saved Susccessfully'
+        ],200);
     }
 
     /**
@@ -34,9 +43,11 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Category $category)
     {
-        //
+        return response()->json([
+            $category
+        ],200);
     }
 
     /**
@@ -46,9 +57,14 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateCategoryRequest $request,Category $category)
     {
-        //
+        $category->update($request->all());
+
+        return response()->json([
+            'res'=>true,
+            'msg'=>'Category updated Suscessfully'
+        ],200);
     }
 
     /**
@@ -57,8 +73,12 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Category $category)
     {
-        //
+        $category->delete();
+        return response()->json([
+            'res'=>true,
+            'msg'=>'Category deleted Suscessfully'
+        ],200);
     }
 }

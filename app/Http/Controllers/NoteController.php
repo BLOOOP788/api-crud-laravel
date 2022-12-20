@@ -89,10 +89,12 @@ class NoteController extends Controller
     }
 
     
-    public function getByCategories(Category $cat){
+    public function getByCategories( $cat){
         
+        $category = DB::table('categories')->where('title',"=", $cat)->first();
+
         //$sql="SELECT * FROM notes INNER JOIN notes_categories ON notes.id=notes_categories.note_id WHERE notes_categories.category_id=1";
-        $notes=Note::join('notes_categories','notes.id','=','notes_categories.note_id')->where('notes_categories.category_id','=',$cat->id)->get();
+        $notes=Note::join('notes_categories','notes.id','=','notes_categories.note_id')->where('notes_categories.category_id','=',$category->id)->get();
        return response()->json([
             'data'=>$notes
         ],200);
